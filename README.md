@@ -36,8 +36,8 @@ from k_lights_interface.k_logging import set_log_level, logging
 
 set_log_level(logging.INFO)
 dev_manager = KSerialManager()
-alldevs = dev_manager.connect_to_all()
-[print(dev) for dev in alldevs]
+devices = dev_manager.connect_to_all()
+[print(dev) for dev in devices]
 ```
 
 ### BLE usage:
@@ -47,13 +47,18 @@ import asyncio
 from k_lights_interface.k_ble_manager import KBleManager
 from k_lights_interface.k_logging import set_log_level, logging
 
-set_log_level(logging.INFO)
-ble_manager = KBleManager()
-devices = await ble_manager.connect_to_all()
-if len(devices) == 0:
-     print("No devices found")
-     return
-print(devices)
-ret, device_stats = devices[0].get_device_stats()
-print(device_stats)
+async def main():
+    set_log_level(logging.INFO)
+    ble_manager = KBleManager()
+    devices = await ble_manager.connect_to_all()
+    if len(devices) == 0:
+        print("No devices found")
+        return
+    print(devices)
+    ret, device_stats = devices[0].get_device_stats()
+    print(device_stats)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+    print("finished")
 ```
