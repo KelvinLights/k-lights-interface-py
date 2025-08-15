@@ -3,7 +3,9 @@
 This is a python package to interface with Kelvin lights using  usb (serial) or bluetooth (experimental). This package is available on PyPI and can be installed with pip.
 To use it in your project, simply run:
 
-    pip install k-lights-interface
+    pip install "python4yahdlc@git+https://x-token-auth:ATCTT3xFfGN0ehp5bAN5THYpRflG9MfmPsQODeO_e3B7bUpfvbX8QzITTwh583tovdBv9n3yCQFUfMoZ0sJBO5YyDXY8CDgGoo4T7qEioLbbiRTpHaruRuTYbvcdzwSGSXXFJUukSplZJDbv8fRu3BSp1F1TtNzriPGYzmosQAu2czU2ix19u7Y=B197A1B4@bitbucket.org/riftlabs/python4yahdlc.git@feature/fix_unsized_arrays" k_lights_interface
+
+The official python4yahdlc package causes a segmentation fault on mac/linux which is why this fork must be used.
 
 ## Features
 
@@ -38,9 +40,19 @@ set_log_level(logging.INFO)
 dev_manager = KSerialManager()
 devices = dev_manager.connect_to_all()
 [print(dev) for dev in devices]
+if (len(devices) == 0):
+    logging.error("No devices found. Make sure its connected via usb")
+    exit(1)
+# Just use the first device for this example
+try:
+    dev = devices[0]
+    dev.set_intensity(10)
+    dev.set_cct(6500, 0)
+except Exception as e:
+    logging.error(f"Failed to set CCT: {e}")
 ```
 
-### BLE usage:
+### BLE usage (THIS IS VERY EXPERIMENTAL):
 
 ```python
 import asyncio
